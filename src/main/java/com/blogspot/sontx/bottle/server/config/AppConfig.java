@@ -1,6 +1,6 @@
 package com.blogspot.sontx.bottle.server.config;
 
-import com.blogspot.sontx.bottle.server.Application;
+import com.blogspot.sontx.bottle.server.ApplicationRoot;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -11,6 +11,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackageClasses = Application.class)
+@ComponentScan(basePackageClasses = ApplicationRoot.class)
 public class AppConfig {
 }
