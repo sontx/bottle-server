@@ -2,7 +2,7 @@ package com.blogspot.sontx.bottle.server.controller;
 
 import com.blogspot.sontx.bottle.server.model.bean.BottleUser;
 import com.blogspot.sontx.bottle.server.model.bean.LoginData;
-import com.blogspot.sontx.bottle.server.model.service.AuthService;
+import com.blogspot.sontx.bottle.server.model.service.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,4 +1,4 @@
-package com.blogspot.sontx.bottle.server.model.service;
+package com.blogspot.sontx.bottle.server.model.service.auth;
 
 import com.blogspot.sontx.bottle.server.model.bean.AuthData;
 import com.blogspot.sontx.bottle.server.model.bean.BottleUser;

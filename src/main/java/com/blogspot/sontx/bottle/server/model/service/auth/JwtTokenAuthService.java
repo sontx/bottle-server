@@ -1,26 +1,28 @@
-package com.blogspot.sontx.bottle.server.model.service;
+package com.blogspot.sontx.bottle.server.model.service.auth;
 
 import com.blogspot.sontx.bottle.server.model.bean.AuthData;
 import com.blogspot.sontx.bottle.server.model.bean.BottleUser;
 import com.blogspot.sontx.bottle.server.model.bean.LoginData;
+import com.blogspot.sontx.bottle.server.model.entity.PublicProfileEntity;
+import com.blogspot.sontx.bottle.server.model.repository.PublicProfileRepository;
 import com.blogspot.sontx.bottle.server.model.repository.UserRepository;
 import io.jsonwebtoken.*;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-@Service
 @Log4j
 public class JwtTokenAuthService implements AuthService {
     @Value("${jwt.secret}")
     private String secret;
     private final UserRepository userRepository;
+    private final PublicProfileRepository publicProfileRepository;
 
     @Autowired
-    public JwtTokenAuthService(UserRepository userRepository) {
+    public JwtTokenAuthService(UserRepository userRepository, PublicProfileRepository publicProfileRepository) {
         this.userRepository = userRepository;
+        this.publicProfileRepository = publicProfileRepository;
     }
 
     @Override
@@ -35,6 +37,8 @@ public class JwtTokenAuthService implements AuthService {
                 bottleUser.setUid(uid);
 
                 log.info("login success: uuid = " + uid);
+
+                updatePublicProfileIfNecessary(uid);
 
                 return bottleUser;
             }
@@ -59,6 +63,12 @@ public class JwtTokenAuthService implements AuthService {
             }
         }
         return null;
+    }
+
+    private void updatePublicProfileIfNecessary(String uid) {
+        if (!publicProfileRepository.exists(uid)) {
+            PublicProfileEntity publicProfile = userRepository.findUserById(uid);
+        }
     }
 
     private String createJwtToken(String uid) {

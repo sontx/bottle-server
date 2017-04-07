@@ -1,7 +1,7 @@
 package com.blogspot.sontx.bottle.server.auth;
 
 import com.blogspot.sontx.bottle.server.model.bean.AuthData;
-import com.blogspot.sontx.bottle.server.model.service.AuthService;
+import com.blogspot.sontx.bottle.server.model.service.auth.AuthService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
