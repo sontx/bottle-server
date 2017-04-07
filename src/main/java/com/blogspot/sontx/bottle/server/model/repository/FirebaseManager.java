@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.tasks.Task;
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -20,6 +21,8 @@ import java.io.IOException;
 @Component
 @Log4j
 public final class FirebaseManager {
+    @Value("${firebase.database.url}")
+    private String firebaseDatabaseUrl;
     private Resource serviceAccountKeyResource = new ClassPathResource("firebase.json");
     private FirebaseDatabase defaultDatabase;
     private FirebaseAuth firebaseAuth;
@@ -27,7 +30,7 @@ public final class FirebaseManager {
     private void setupFirebase() throws IOException {
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredential(FirebaseCredentials.fromCertificate(serviceAccountKeyResource.getInputStream()))
-                .setDatabaseUrl("https://bottle-e6f6e.firebaseio.com/")
+                .setDatabaseUrl(firebaseDatabaseUrl)
                 .build();
 
         FirebaseApp firebaseApp = FirebaseApp.initializeApp(options);
