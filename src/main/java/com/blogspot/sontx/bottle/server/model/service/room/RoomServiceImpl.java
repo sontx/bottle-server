@@ -22,13 +22,13 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<Room> getRooms(int page, int pageSize) {
+    public List<Room> getRooms(int categoryId, int page, int pageSize) {
         if (page < 0)
             page = 0;
         if (pageSize <= 0)
             pageSize = 10;
         Pageable pageable = new PageRequest(page, pageSize);
-        Page<RoomEntity> roomEntities = roomRepository.findAll(pageable);
+        Page<RoomEntity> roomEntities = roomRepository.findAllByCategoryId(categoryId, pageable);
 
         List<Room> rooms = new ArrayList<>(roomEntities.getSize());
         for (RoomEntity roomEntity : roomEntities) {

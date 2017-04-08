@@ -5,5 +5,5 @@ import com.blogspot.sontx.bottle.server.model.bean.Room;
 import java.util.List;
 
 public interface RoomService {
-    List<Room> getRooms(int page, int pageSize);
+    List<Room> getRooms(int categoryId, int page, int pageSize);
 }
