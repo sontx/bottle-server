@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/rest/rooms")
 public class RoomRestController {
@@ -30,8 +32,13 @@ public class RoomRestController {
 
     @PostMapping("{roomId}/messages")
     ResponseEntity postMessage(@PathVariable int roomId, @RequestBody RoomMessage message, UsernamePasswordAuthenticationToken authenticationToken) {
-        message.setRoomId(roomId);
-        RoomMessage roomMessage = roomMessageService.postMessage(message, (AuthData) authenticationToken.getPrincipal());
+        RoomMessage roomMessage = roomMessageService.postMessage(roomId, message, (AuthData) authenticationToken.getPrincipal());
+        return roomMessage != null ? ResponseEntity.ok(roomMessage) : ResponseEntity.status(400).build();
+    }
+
+    @GetMapping("{roomId}/messages")
+    ResponseEntity getMessages(@PathVariable int roomId, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        List<RoomMessage> roomMessage = roomMessageService.getMessages(roomId, page, pageSize);
         return roomMessage != null ? ResponseEntity.ok(roomMessage) : ResponseEntity.status(400).build();
     }
 }

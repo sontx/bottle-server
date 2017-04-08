@@ -4,6 +4,8 @@ import com.blogspot.sontx.bottle.server.model.bean.Category;
 import com.blogspot.sontx.bottle.server.model.entity.CategoryEntity;
 import com.blogspot.sontx.bottle.server.model.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@PropertySource("classpath:bottle-config.properties")
 public class CategoryServiceImpl implements CategoryService {
+    @Value("${default.page.size}")
+    private int defaultPageSize;
     private final CategoryRepository categoryRepository;
 
     @Autowired
@@ -26,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (page < 0)
             page = 0;
         if (pageSize <= 0)
-            pageSize = 10;
+            pageSize = defaultPageSize;
 
         Pageable pageable = new PageRequest(page, pageSize);
         Page<CategoryEntity> roomEntities = categoryRepository.findAll(pageable);

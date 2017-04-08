@@ -3,6 +3,10 @@ package com.blogspot.sontx.bottle.server.model.service.message;
 import com.blogspot.sontx.bottle.server.model.bean.AuthData;
 import com.blogspot.sontx.bottle.server.model.bean.RoomMessage;
 
+import java.util.List;
+
 public interface RoomMessageService {
-    RoomMessage postMessage(RoomMessage message, AuthData authData);
+    RoomMessage postMessage(int roomId, RoomMessage message, AuthData authData);
+
+    List<RoomMessage> getMessages(int roomId, int page, int pageSize);
 }
