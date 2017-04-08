@@ -12,7 +12,6 @@ import java.util.Set;
 @Table(name = "public_profile", schema = "bottle")
 public class PublicProfileEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, length = 255)
     private String id;
 
@@ -24,9 +23,9 @@ public class PublicProfileEntity {
     @Column(name = "avatarUrl", nullable = false, length = 255)
     private String avatarUrl;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "publicProfile")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "publicProfile", cascade = CascadeType.ALL)
     private Set<GeoMessageEntity> geoMessages;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "publicProfile")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "publicProfile", cascade = CascadeType.ALL)
     private Set<RoomMessageEntity> roomMessages;
 }

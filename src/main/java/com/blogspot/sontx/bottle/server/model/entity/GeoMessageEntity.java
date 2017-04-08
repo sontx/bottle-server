@@ -6,22 +6,14 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 
 @Data
-@EqualsAndHashCode(exclude = "publicProfile")
+@EqualsAndHashCode(exclude = {"messageDetail", "publicProfile"})
 @Entity
 @Table(name = "geo_message", schema = "bottle")
 public class GeoMessageEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Basic
-    @Column(name = "text", nullable = false, length = 4000)
-    private String text;
-
-    @Basic
-    @Column(name = "mediaUrl", nullable = true, length = 1000)
-    private String mediaUrl;
 
     @Basic
     @Column(name = "longitude", nullable = false, precision = 0)
@@ -30,6 +22,14 @@ public class GeoMessageEntity {
     @Basic
     @Column(name = "latitude", nullable = false, precision = 0)
     private double latitude;
+
+    @Basic
+    @Column(name = "addressName", nullable = true, length = 100)
+    private String addressName;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "detailId", referencedColumnName = "id", nullable = false)
+    private MessageDetailEntity messageDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)

@@ -4,15 +4,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
-@EqualsAndHashCode(exclude = {"roomCategory"})
+@EqualsAndHashCode(exclude = {"roomCategory", "roomMessages"})
 @Entity
 @Table(name = "room", schema = "bottle")
 public class RoomEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Basic
@@ -23,7 +24,10 @@ public class RoomEntity {
     @Column(name = "description", nullable = true, length = 255)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "categoryId", referencedColumnName = "id", nullable = false)
     private RoomCategoryEntity roomCategory;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private Set<RoomMessageEntity> roomMessages;
 }

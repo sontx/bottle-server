@@ -6,28 +6,24 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 
 @Data
-@EqualsAndHashCode(exclude = "publicProfile")
+@EqualsAndHashCode(exclude = {"room", "messageDetail", "publicProfile"})
 @Entity
 @Table(name = "room_message", schema = "bottle")
 public class RoomMessageEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Basic
-    @Column(name = "text", nullable = false, length = 4000)
-    private String text;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "roomId", referencedColumnName = "id")
+    private RoomEntity room;
 
-    @Basic
-    @Column(name = "mediaUrl", nullable = false, length = 1000)
-    private String mediaUrl;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "detailId", referencedColumnName = "id", nullable = false)
+    private MessageDetailEntity messageDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)
     private PublicProfileEntity publicProfile;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomId", referencedColumnName = "id", nullable = false)
-    private RoomEntity room;
 }

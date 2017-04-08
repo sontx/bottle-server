@@ -2,6 +2,7 @@ package com.blogspot.sontx.bottle.server.model.service.message;
 
 import com.blogspot.sontx.bottle.server.model.bean.AuthData;
 import com.blogspot.sontx.bottle.server.model.bean.RoomMessage;
+import com.blogspot.sontx.bottle.server.model.entity.MessageDetailEntity;
 import com.blogspot.sontx.bottle.server.model.entity.PublicProfileEntity;
 import com.blogspot.sontx.bottle.server.model.entity.RoomEntity;
 import com.blogspot.sontx.bottle.server.model.entity.RoomMessageEntity;
@@ -30,15 +31,19 @@ public class RoomMessageServiceImpl implements RoomMessageService {
         PublicProfileEntity publicProfileEntity = publicProfileRepository.findOne(authData.getUid());
 
         if (roomEntity != null && publicProfileEntity != null) {
+            MessageDetailEntity messageDetailEntity = new MessageDetailEntity();
+            messageDetailEntity.setText(message.getText());
+            messageDetailEntity.setMediaUrl(message.getMediaUrl());
+
             RoomMessageEntity roomMessageEntity = new RoomMessageEntity();
-            roomMessageEntity.setText(message.getText());
-            roomMessageEntity.setMediaUrl(message.getMediaUrl());
+            roomMessageEntity.setMessageDetail(messageDetailEntity);
             roomMessageEntity.setPublicProfile(publicProfileEntity);
             roomMessageEntity.setRoom(roomEntity);
 
-            RoomMessageEntity savedRoomMessageEntity = roomMessageRepository.saveAndFlush(roomMessageEntity);
+            roomMessageRepository.saveAndFlush(roomMessageEntity);
 
-            message.setId(savedRoomMessageEntity.getId());
+            message.setId(roomMessageEntity.getId());
+            message.setTimestamp(messageDetailEntity.getTimestamp().getTime());
 
             return message;
         }
