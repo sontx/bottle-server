@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(exclude = {"roomCategory", "roomMessages"})
+@EqualsAndHashCode(exclude = {"category", "roomMessages"})
 @Entity
 @Table(name = "room", schema = "bottle")
 public class RoomEntity {
@@ -26,7 +26,7 @@ public class RoomEntity {
 
     @ManyToOne
     @JoinColumn(name = "categoryId", referencedColumnName = "id", nullable = false)
-    private RoomCategoryEntity roomCategory;
+    private CategoryEntity category;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private Set<RoomMessageEntity> roomMessages;
