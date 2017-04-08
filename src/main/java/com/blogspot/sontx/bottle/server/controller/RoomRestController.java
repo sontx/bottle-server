@@ -1,6 +1,7 @@
 package com.blogspot.sontx.bottle.server.controller;
 
 import com.blogspot.sontx.bottle.server.model.bean.AuthData;
+import com.blogspot.sontx.bottle.server.model.bean.Room;
 import com.blogspot.sontx.bottle.server.model.bean.RoomMessage;
 import com.blogspot.sontx.bottle.server.model.service.message.RoomMessageService;
 import com.blogspot.sontx.bottle.server.model.service.room.RoomService;
@@ -10,7 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/rest/categories/{categoryId}/rooms")
+@RequestMapping("/rest/rooms")
 public class RoomRestController {
     private final RoomMessageService roomMessageService;
     private final RoomService roomService;
@@ -19,6 +20,12 @@ public class RoomRestController {
     public RoomRestController(RoomMessageService roomMessageService, RoomService roomService) {
         this.roomMessageService = roomMessageService;
         this.roomService = roomService;
+    }
+
+    @GetMapping("{roomId}")
+    ResponseEntity getRoom(@PathVariable int roomId) {
+        Room room = roomService.getRoom(roomId);
+        return room != null ? ResponseEntity.ok(room) : ResponseEntity.status(400).build();
     }
 
     @PostMapping("{roomId}/messages")

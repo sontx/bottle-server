@@ -33,10 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         List<Category> categories = new ArrayList<>(roomEntities.getSize());
         for (CategoryEntity categoryEntity : roomEntities) {
-            Category category = new Category();
-            category.setId(categoryEntity.getId());
-            category.setName(categoryEntity.getName());
-            category.setDescription(categoryEntity.getDescription());
+            Category category = createCategoryFromEntity(categoryEntity);
             categories.add(category);
         }
 
@@ -47,14 +44,16 @@ public class CategoryServiceImpl implements CategoryService {
     public Category getCategory(int categoryId) {
         if (categoryId >= 0) {
             CategoryEntity categoryEntity = categoryRepository.findOne(categoryId);
-
-            Category category = new Category();
-            category.setId(categoryEntity.getId());
-            category.setName(categoryEntity.getName());
-            category.setDescription(categoryEntity.getDescription());
-
-            return category;
+            return createCategoryFromEntity(categoryEntity);
         }
         return null;
+    }
+
+    private Category createCategoryFromEntity(CategoryEntity categoryEntity) {
+        Category category = new Category();
+        category.setId(categoryEntity.getId());
+        category.setName(categoryEntity.getName());
+        category.setDescription(categoryEntity.getDescription());
+        return category;
     }
 }

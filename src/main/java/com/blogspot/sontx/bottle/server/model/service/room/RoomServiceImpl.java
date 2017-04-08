@@ -32,13 +32,27 @@ public class RoomServiceImpl implements RoomService {
 
         List<Room> rooms = new ArrayList<>(roomEntities.getSize());
         for (RoomEntity roomEntity : roomEntities) {
-            Room room = new Room();
-            room.setId(roomEntity.getId());
-            room.setName(roomEntity.getName());
-            room.setDescription(roomEntity.getDescription());
+            Room room = createRoomFromEntity(roomEntity);
             rooms.add(room);
         }
 
         return rooms;
+    }
+
+    @Override
+    public Room getRoom(int roomId) {
+        if (roomId < 0)
+            return null;
+
+        RoomEntity roomEntity = roomRepository.findOne(roomId);
+        return createRoomFromEntity(roomEntity);
+    }
+
+    private Room createRoomFromEntity(RoomEntity roomEntity) {
+        Room room = new Room();
+        room.setId(roomEntity.getId());
+        room.setName(roomEntity.getName());
+        room.setDescription(roomEntity.getDescription());
+        return room;
     }
 }
