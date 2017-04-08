@@ -42,4 +42,19 @@ public class CategoryServiceImpl implements CategoryService {
 
         return categories;
     }
+
+    @Override
+    public Category getCategory(int categoryId) {
+        if (categoryId >= 0) {
+            CategoryEntity categoryEntity = categoryRepository.findOne(categoryId);
+
+            Category category = new Category();
+            category.setId(categoryEntity.getId());
+            category.setName(categoryEntity.getName());
+            category.setDescription(categoryEntity.getDescription());
+
+            return category;
+        }
+        return null;
+    }
 }
