@@ -75,8 +75,8 @@ public final class FirebaseManager {
         defaultDatabase.getReference("public_profiles").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                publicProfile.setDisplayName(dataSnapshot.getValue(String.class));
-                publicProfile.setAvatarUrl(dataSnapshot.getValue(String.class));
+                publicProfile.setDisplayName(dataSnapshot.child("displayName").getValue(String.class));
+                publicProfile.setAvatarUrl(dataSnapshot.child("avatarUrl").getValue(String.class));
 
                 synchronized (lock) {
                     lock.notify();
