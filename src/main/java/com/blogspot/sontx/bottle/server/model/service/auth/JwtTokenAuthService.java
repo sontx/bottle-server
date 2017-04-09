@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
 @Log4j
+//@Service
 public class JwtTokenAuthService implements AuthService {
     @Value("${jwt.secret}")
     private String secret;

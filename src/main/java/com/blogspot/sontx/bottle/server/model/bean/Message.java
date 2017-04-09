@@ -8,4 +8,5 @@ public abstract class Message {
     private String text;
     private String mediaUrl;
     private long timestamp;
+    private PublicProfile owner;
 }

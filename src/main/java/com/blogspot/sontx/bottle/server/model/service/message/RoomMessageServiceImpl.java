@@ -1,6 +1,7 @@
 package com.blogspot.sontx.bottle.server.model.service.message;
 
 import com.blogspot.sontx.bottle.server.model.bean.AuthData;
+import com.blogspot.sontx.bottle.server.model.bean.PublicProfile;
 import com.blogspot.sontx.bottle.server.model.bean.RoomMessage;
 import com.blogspot.sontx.bottle.server.model.entity.MessageDetailEntity;
 import com.blogspot.sontx.bottle.server.model.entity.PublicProfileEntity;
@@ -85,13 +86,21 @@ public class RoomMessageServiceImpl implements RoomMessageService {
     private RoomMessage createRoomMessageFromEntity(RoomMessageEntity roomMessageEntity) {
         RoomMessage roomMessage = new RoomMessage();
 
-        roomMessage.setId(roomMessage.getId());
+        roomMessage.setId(roomMessageEntity.getId());
         roomMessage.setRoomId(roomMessageEntity.getRoom().getId());
 
         MessageDetailEntity messageDetail = roomMessageEntity.getMessageDetail();
         roomMessage.setText(messageDetail.getText());
         roomMessage.setMediaUrl(messageDetail.getMediaUrl());
         roomMessage.setTimestamp(messageDetail.getTimestamp().getTime());
+
+        PublicProfileEntity publicProfileEntity = roomMessageEntity.getPublicProfile();
+        PublicProfile publicProfile = new PublicProfile();
+        publicProfile.setId(publicProfileEntity.getId());
+        publicProfile.setDisplayName(publicProfileEntity.getDisplayName());
+        publicProfile.setAvatarUrl(publicProfile.getAvatarUrl());
+
+        roomMessage.setOwner(publicProfile);
 
         return roomMessage;
     }
