@@ -4,17 +4,24 @@ import com.blogspot.sontx.bottle.server.model.bean.AuthData;
 import com.blogspot.sontx.bottle.server.model.bean.BottleUser;
 import com.blogspot.sontx.bottle.server.model.bean.LoginData;
 import com.blogspot.sontx.bottle.server.model.entity.PublicProfileEntity;
+import com.blogspot.sontx.bottle.server.model.entity.UserSettingEntity;
 import com.blogspot.sontx.bottle.server.model.repository.PublicProfileRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 @Service
+@PropertySource("classpath:bottle-config.properties")
 public class FakeAuthService implements AuthService {
+
     @Value("${jwt.secret}")
     private String secret;
+    @Value("${default.room.id}")
+    private int defaultRoomId;
+
     private final PublicProfileRepository publicProfileRepository;
 
     @Autowired
@@ -50,6 +57,13 @@ public class FakeAuthService implements AuthService {
             publicProfile.setAvatarUrl("https://scontent.fdad3-1.fna.fbcdn.net/v/t1.0-9/536012_153138571496960_213017345_n.jpg?oh=4c9ddadd76fbef40ea1f4cecf32e975c&oe=595BD2A1");
             publicProfile.setDisplayName("Trần Xuân Sơn");
             publicProfile.setId(uid);
+
+            UserSettingEntity userSettingEntity = new UserSettingEntity();
+            userSettingEntity.setPublicProfile(publicProfile);
+            userSettingEntity.setCurrentRoomId(defaultRoomId);
+
+            publicProfile.setUserSetting(userSettingEntity);
+
             publicProfileRepository.save(publicProfile);
         }
     }

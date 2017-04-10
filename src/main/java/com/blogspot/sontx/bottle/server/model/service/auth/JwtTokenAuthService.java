@@ -4,19 +4,26 @@ import com.blogspot.sontx.bottle.server.model.bean.AuthData;
 import com.blogspot.sontx.bottle.server.model.bean.BottleUser;
 import com.blogspot.sontx.bottle.server.model.bean.LoginData;
 import com.blogspot.sontx.bottle.server.model.entity.PublicProfileEntity;
+import com.blogspot.sontx.bottle.server.model.entity.UserSettingEntity;
 import com.blogspot.sontx.bottle.server.model.repository.PublicProfileRepository;
 import com.blogspot.sontx.bottle.server.model.repository.UserRepository;
 import io.jsonwebtoken.*;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.StringUtils;
 
 @Log4j
 //@Service
+@PropertySource("classpath:bottle-config.properties")
 public class JwtTokenAuthService implements AuthService {
+
     @Value("${jwt.secret}")
     private String secret;
+    @Value("${default.room.id}")
+    private int defaultRoomId;
+
     private final UserRepository userRepository;
     private final PublicProfileRepository publicProfileRepository;
 
@@ -68,7 +75,15 @@ public class JwtTokenAuthService implements AuthService {
 
     private void updatePublicProfileIfNecessary(String uid) {
         if (!publicProfileRepository.exists(uid)) {
-            PublicProfileEntity publicProfile = userRepository.findUserById(uid);
+            PublicProfileEntity publicProfileEntity = userRepository.findUserById(uid);
+
+            UserSettingEntity userSettingEntity = new UserSettingEntity();
+            userSettingEntity.setPublicProfile(publicProfileEntity);
+            userSettingEntity.setCurrentRoomId(defaultRoomId);
+
+            publicProfileEntity.setUserSetting(userSettingEntity);
+
+            publicProfileRepository.save(publicProfileEntity);
         }
     }
 

@@ -28,4 +28,7 @@ public class PublicProfileEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "publicProfile", cascade = CascadeType.ALL)
     private Set<RoomMessageEntity> roomMessages;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "publicProfile", cascade = CascadeType.ALL)
+    private UserSettingEntity userSetting;
 }
