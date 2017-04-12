@@ -2,6 +2,7 @@ package com.blogspot.sontx.bottle.server.model.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Data
 @EqualsAndHashCode(exclude = {"geoMessage", "roomMessage"})
+@ToString(exclude = {"geoMessage", "roomMessage"})
 @Entity
 @Table(name = "message_detail", schema = "bottle")
 public class MessageDetailEntity {

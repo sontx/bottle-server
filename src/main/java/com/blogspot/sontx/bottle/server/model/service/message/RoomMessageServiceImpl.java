@@ -98,7 +98,7 @@ public class RoomMessageServiceImpl implements RoomMessageService {
         PublicProfile publicProfile = new PublicProfile();
         publicProfile.setId(publicProfileEntity.getId());
         publicProfile.setDisplayName(publicProfileEntity.getDisplayName());
-        publicProfile.setAvatarUrl(publicProfile.getAvatarUrl());
+        publicProfile.setAvatarUrl(publicProfileEntity.getAvatarUrl());
 
         roomMessage.setOwner(publicProfile);
 

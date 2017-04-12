@@ -2,11 +2,13 @@ package com.blogspot.sontx.bottle.server.model.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Data
 @EqualsAndHashCode(exclude = "publicProfile")
+@ToString(exclude = "publicProfile")
 @Entity
 @Table(name = "user_setting", schema = "bottle")
 public class UserSettingEntity {

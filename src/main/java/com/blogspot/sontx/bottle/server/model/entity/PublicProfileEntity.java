@@ -2,12 +2,14 @@ package com.blogspot.sontx.bottle.server.model.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(exclude = {"geoMessages", "roomMessages"})
+@EqualsAndHashCode(exclude = {"geoMessages", "roomMessages", "userSetting"})
+@ToString(exclude = {"geoMessages", "roomMessages", "userSetting"})
 @Entity
 @Table(name = "public_profile", schema = "bottle")
 public class PublicProfileEntity {
