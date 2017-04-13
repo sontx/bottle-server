@@ -72,7 +72,7 @@ public class RoomMessageServiceImpl implements RoomMessageService {
         if (pageSize <= 0)
             pageSize = defaultPageSize;
         Pageable pageable = new PageRequest(page, pageSize);
-        Page<RoomMessageEntity> roomEntities = roomMessageRepository.findAllByRoomId(roomId, pageable);
+        Page<RoomMessageEntity> roomEntities = roomMessageRepository.findAllByRoomIdOrderByMessageDetail_TimestampDesc(roomId, pageable);
 
         List<RoomMessage> roomMessages = new ArrayList<>(roomEntities.getSize());
         for (RoomMessageEntity roomEntity : roomEntities) {

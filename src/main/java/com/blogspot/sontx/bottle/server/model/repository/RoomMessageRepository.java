@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoomMessageRepository extends JpaRepository<RoomMessageEntity, Integer> {
 
-    Page<RoomMessageEntity> findAllByRoomId(int roomId, Pageable pageable);
+    Page<RoomMessageEntity> findAllByRoomIdOrderByMessageDetail_TimestampDesc(int roomId, Pageable pageable);
 }
