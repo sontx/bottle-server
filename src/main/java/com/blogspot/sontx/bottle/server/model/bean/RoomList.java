@@ -2,10 +2,11 @@ package com.blogspot.sontx.bottle.server.model.bean;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-public class Room {
-    private int id;
+public class RoomList {
     private int categoryId;
-    private String name;
-    private String description;
+    private String categoryName;
+    private List<Room> rooms;
 }

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class RoomServiceImpl implements RoomService {
 
         List<Room> rooms = new ArrayList<>(roomEntities.getSize());
         for (RoomEntity roomEntity : roomEntities) {
-            Room room = createRoomFromEntity(roomEntity);
+            Room room = createRoomFromEntity(roomEntity, categoryId);
             rooms.add(room);
         }
 
@@ -45,17 +46,19 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    @Transactional
     public Room getRoom(int roomId) {
         if (roomId < 0)
             return null;
 
         RoomEntity roomEntity = roomRepository.findOne(roomId);
-        return createRoomFromEntity(roomEntity);
+        return createRoomFromEntity(roomEntity, -1);
     }
 
-    private Room createRoomFromEntity(RoomEntity roomEntity) {
+    private Room createRoomFromEntity(RoomEntity roomEntity, int categoryId) {
         Room room = new Room();
         room.setId(roomEntity.getId());
+        room.setCategoryId(categoryId >= 0 ? categoryId : roomEntity.getCategory().getId());
         room.setName(roomEntity.getName());
         room.setDescription(roomEntity.getDescription());
         return room;
