@@ -59,6 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setId(categoryEntity.getId());
         category.setName(categoryEntity.getName());
         category.setDescription(categoryEntity.getDescription());
+        category.setPhotoUrl(categoryEntity.getPhotoUrl());
         return category;
     }
 }

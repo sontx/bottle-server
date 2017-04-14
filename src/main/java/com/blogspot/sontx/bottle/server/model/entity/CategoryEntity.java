@@ -26,6 +26,10 @@ public class CategoryEntity {
     @Column(name = "description", nullable = true, length = 255)
     private String description;
 
+    @Basic
+    @Column(name = "photoUrl", nullable = true, length = 255)
+    private String photoUrl;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.ALL)
     private Set<RoomEntity> rooms;
 }
