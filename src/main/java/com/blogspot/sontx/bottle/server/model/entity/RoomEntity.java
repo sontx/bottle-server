@@ -26,6 +26,10 @@ public class RoomEntity {
     @Column(name = "description", nullable = true, length = 255)
     private String description;
 
+    @Basic
+    @Column(name = "photoUrl", nullable = true, length = 255)
+    private String photoUrl;
+
     @ManyToOne
     @JoinColumn(name = "categoryId", referencedColumnName = "id", nullable = false)
     private CategoryEntity category;

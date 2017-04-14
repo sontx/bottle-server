@@ -61,6 +61,7 @@ public class RoomServiceImpl implements RoomService {
         room.setCategoryId(categoryId >= 0 ? categoryId : roomEntity.getCategory().getId());
         room.setName(roomEntity.getName());
         room.setDescription(roomEntity.getDescription());
+        room.setPhotoUrl(roomEntity.getPhotoUrl());
         return room;
     }
 }

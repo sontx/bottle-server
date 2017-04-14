@@ -12,10 +12,11 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Log4j
-//@Service
+@Service
 @PropertySource("classpath:bottle-config.properties")
 public class JwtTokenAuthService implements AuthService {
 
