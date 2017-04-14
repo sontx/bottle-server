@@ -2,7 +2,6 @@ package com.blogspot.sontx.bottle.server.controller;
 
 import com.blogspot.sontx.bottle.server.model.bean.Category;
 import com.blogspot.sontx.bottle.server.model.bean.Room;
-import com.blogspot.sontx.bottle.server.model.bean.RoomList;
 import com.blogspot.sontx.bottle.server.model.service.category.CategoryService;
 import com.blogspot.sontx.bottle.server.model.service.room.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +37,6 @@ public class CategoryRestController {
     @GetMapping("{categoryId}/rooms")
     ResponseEntity getRooms(@PathVariable int categoryId, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         List<Room> rooms = roomService.getRooms(categoryId, page, pageSize);
-        Category category = categoryService.getCategory(categoryId);
-        if (rooms != null && category != null) {
-            RoomList roomList = new RoomList();
-            roomList.setCategoryId(category.getId());
-            roomList.setCategoryName(category.getName());
-            roomList.setRooms(rooms);
-            return ResponseEntity.ok(roomList);
-        }
-        return ResponseEntity.status(400).build();
+        return rooms != null ? ResponseEntity.ok(rooms) : ResponseEntity.status(400).build();
     }
 }
