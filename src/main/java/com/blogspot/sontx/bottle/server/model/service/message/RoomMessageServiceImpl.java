@@ -46,6 +46,7 @@ public class RoomMessageServiceImpl implements RoomMessageService {
         if (roomEntity != null && publicProfileEntity != null) {
             MessageDetailEntity messageDetailEntity = new MessageDetailEntity();
             messageDetailEntity.setText(message.getText());
+            messageDetailEntity.setType(message.getType());
             messageDetailEntity.setMediaUrl(message.getMediaUrl());
 
             RoomMessageEntity roomMessageEntity = new RoomMessageEntity();
@@ -92,6 +93,7 @@ public class RoomMessageServiceImpl implements RoomMessageService {
         MessageDetailEntity messageDetail = roomMessageEntity.getMessageDetail();
         roomMessage.setText(messageDetail.getText());
         roomMessage.setMediaUrl(messageDetail.getMediaUrl());
+        roomMessage.setType(messageDetail.getType());
         roomMessage.setTimestamp(messageDetail.getTimestamp().getTime());
 
         PublicProfileEntity publicProfileEntity = roomMessageEntity.getPublicProfile();

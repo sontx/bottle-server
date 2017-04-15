@@ -28,6 +28,10 @@ public class MessageDetailEntity {
     private String mediaUrl;
 
     @Basic
+    @Column(name = "type", nullable = false, length = 10)
+    private String type;
+
+    @Basic
     @Column(name = "timestamp", nullable = false)
     private Timestamp timestamp;
 
