@@ -1,10 +1,13 @@
 package com.blogspot.sontx.bottle.server.controller;
 
+import com.blogspot.sontx.bottle.server.model.bean.AuthData;
 import com.blogspot.sontx.bottle.server.model.bean.BottleUser;
 import com.blogspot.sontx.bottle.server.model.bean.LoginData;
+import com.blogspot.sontx.bottle.server.model.bean.VerifyResult;
 import com.blogspot.sontx.bottle.server.model.service.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,4 +29,9 @@ class AuthRestController {
         return bottleUser != null ? ResponseEntity.ok(bottleUser) : ResponseEntity.status(401).build();
     }
 
+    @PostMapping("verify")
+    ResponseEntity verify(UsernamePasswordAuthenticationToken authenticationToken) {
+        VerifyResult verifyResult = authService.verify((AuthData) authenticationToken.getPrincipal());
+        return verifyResult != null ? ResponseEntity.ok(verifyResult) : ResponseEntity.status(401).build();
+    }
 }

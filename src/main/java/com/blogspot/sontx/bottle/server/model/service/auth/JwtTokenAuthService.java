@@ -3,6 +3,7 @@ package com.blogspot.sontx.bottle.server.model.service.auth;
 import com.blogspot.sontx.bottle.server.model.bean.AuthData;
 import com.blogspot.sontx.bottle.server.model.bean.BottleUser;
 import com.blogspot.sontx.bottle.server.model.bean.LoginData;
+import com.blogspot.sontx.bottle.server.model.bean.VerifyResult;
 import com.blogspot.sontx.bottle.server.model.entity.PublicProfileEntity;
 import com.blogspot.sontx.bottle.server.model.entity.UserSettingEntity;
 import com.blogspot.sontx.bottle.server.model.repository.PublicProfileRepository;
@@ -12,11 +13,10 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Log4j
-@Service
+//@Service
 @PropertySource("classpath:bottle-config.properties")
 public class JwtTokenAuthService implements AuthService {
 
@@ -72,6 +72,15 @@ public class JwtTokenAuthService implements AuthService {
             }
         }
         return null;
+    }
+
+    @Override
+    public VerifyResult verify(AuthData authData) {
+        if (authData == null)
+            return null;
+        VerifyResult verifyResult = new VerifyResult();
+        verifyResult.setUserId(authData.getUid());
+        return verifyResult;
     }
 
     private void updatePublicProfileIfNecessary(String uid) {

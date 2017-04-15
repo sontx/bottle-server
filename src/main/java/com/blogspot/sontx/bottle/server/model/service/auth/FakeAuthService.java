@@ -3,6 +3,7 @@ package com.blogspot.sontx.bottle.server.model.service.auth;
 import com.blogspot.sontx.bottle.server.model.bean.AuthData;
 import com.blogspot.sontx.bottle.server.model.bean.BottleUser;
 import com.blogspot.sontx.bottle.server.model.bean.LoginData;
+import com.blogspot.sontx.bottle.server.model.bean.VerifyResult;
 import com.blogspot.sontx.bottle.server.model.entity.PublicProfileEntity;
 import com.blogspot.sontx.bottle.server.model.entity.UserSettingEntity;
 import com.blogspot.sontx.bottle.server.model.repository.PublicProfileRepository;
@@ -11,8 +12,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
 
-//@Service
+@Service
 @PropertySource("classpath:bottle-config.properties")
 public class FakeAuthService implements AuthService {
 
@@ -48,6 +50,15 @@ public class FakeAuthService implements AuthService {
             return authData;
         }
         return null;
+    }
+
+    @Override
+    public VerifyResult verify(AuthData authData) {
+        if (authData == null)
+            return null;
+        VerifyResult verifyResult = new VerifyResult();
+        verifyResult.setUserId(authData.getUid());
+        return verifyResult;
     }
 
     private void updatePublicProfileIfNecessary(String uid) {
