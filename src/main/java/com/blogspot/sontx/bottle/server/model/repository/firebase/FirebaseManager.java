@@ -36,7 +36,7 @@ public final class FirebaseManager {
         firebaseAuth = FirebaseAuth.getInstance(firebaseApp);
     }
 
-    public String getUserIdByToken(String token) throws InterruptedException {
+    String getUserIdByToken(String token) throws InterruptedException {
         final Task<FirebaseToken> firebaseTokenTask = firebaseAuth.verifyIdToken(token);
         final String[] userIds = {null};
         final Object lock = new Object();
@@ -58,15 +58,15 @@ public final class FirebaseManager {
         }
     }
 
-    public DatabaseReference getReference() {
+    DatabaseReference getReference() {
         return defaultDatabase.getReference();
     }
 
-    public DatabaseReference getReference(String path) {
+    DatabaseReference getReference(String path) {
         return defaultDatabase.getReference(path);
     }
 
-    public PublicProfileEntity getPublicProfileById(String uid) throws InterruptedException {
+    PublicProfileEntity getPublicProfileById(String uid) throws InterruptedException {
         final PublicProfileEntity publicProfile = new PublicProfileEntity();
         publicProfile.setId(uid);
 
