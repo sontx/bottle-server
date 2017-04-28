@@ -1,5 +1,6 @@
 package com.blogspot.sontx.bottle.server.model.service.usersetting;
 
+import com.blogspot.sontx.bottle.server.model.bean.Coordination;
 import com.blogspot.sontx.bottle.server.model.bean.UserSetting;
 import com.blogspot.sontx.bottle.server.model.entity.UserSettingEntity;
 import com.blogspot.sontx.bottle.server.model.repository.UserSettingRepository;
@@ -26,6 +27,34 @@ public class UserSettingServiceImpl implements UserSettingService {
         UserSetting userSetting = new UserSetting();
         userSetting.setCurrentRoomId(userSettingEntity.getCurrentRoomId());
 
+        Coordination coordination = new Coordination();
+        coordination.setLatitude(userSettingEntity.getCurrentLatitude());
+        coordination.setLongitude(userSettingEntity.getCurrentLongitude());
+
+        userSetting.setCurrentLocation(coordination);
+
         return userSetting;
+    }
+
+    @Override
+    public UserSetting updateUserSetting(String userId, UserSetting userSetting) {
+        if (StringUtils.isEmpty(userId))
+            return null;
+        UserSettingEntity userSettingEntity = userSettingRepository.findOneByPublicProfileId(userId);
+        if (userSettingEntity != null) {
+            userSettingEntity.setCurrentRoomId(userSetting.getCurrentRoomId());
+
+            Coordination currentLocation = userSetting.getCurrentLocation();
+            if (currentLocation != null) {
+                userSettingEntity.setCurrentLatitude(currentLocation.getLatitude());
+                userSettingEntity.setCurrentLongitude(currentLocation.getLongitude());
+            }
+
+            userSettingRepository.save(userSettingEntity);
+
+            return userSetting;
+        }
+
+        return null;
     }
 }

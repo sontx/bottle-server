@@ -21,6 +21,14 @@ public class UserSettingEntity {
     @Column(name = "currentRoomId", nullable = true)
     private Integer currentRoomId;
 
+    @Basic
+    @Column(name = "currentLatitude", nullable = false)
+    private double currentLatitude;
+
+    @Basic
+    @Column(name = "currentLongitude", nullable = false)
+    private double currentLongitude;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)
     private PublicProfileEntity publicProfile;
