@@ -2,6 +2,7 @@ package com.blogspot.sontx.bottle.server.model.service.message;
 
 import com.blogspot.sontx.bottle.server.model.bean.AuthData;
 import com.blogspot.sontx.bottle.server.model.bean.GeoMessage;
+import com.blogspot.sontx.bottle.server.model.bean.PublicProfile;
 import com.blogspot.sontx.bottle.server.model.entity.GeoMessageEntity;
 import com.blogspot.sontx.bottle.server.model.entity.MessageDetailEntity;
 import com.blogspot.sontx.bottle.server.model.entity.PublicProfileEntity;
@@ -54,6 +55,14 @@ public class GeoMessageServiceImpl implements GeoMessageService {
             geoMessage.setAddressName(geoMessageEntity.getAddressName());
             geoMessage.setLatitude(geoMessageEntity.getLatitude());
             geoMessage.setLongitude(geoMessageEntity.getLongitude());
+
+            PublicProfileEntity publicProfileEntity = geoMessageEntity.getPublicProfile();
+            PublicProfile publicProfile = new PublicProfile();
+            publicProfile.setId(publicProfileEntity.getId());
+            publicProfile.setDisplayName(publicProfileEntity.getDisplayName());
+            publicProfile.setAvatarUrl(publicProfileEntity.getAvatarUrl());
+
+            geoMessage.setOwner(publicProfile);
 
             geoMessages.add(geoMessage);
         }
