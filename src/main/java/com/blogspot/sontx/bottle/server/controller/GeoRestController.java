@@ -21,8 +21,12 @@ public class GeoRestController {
     }
 
     @GetMapping("messages")
-    ResponseEntity getMessagesAroundLocation(@RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude) {
-        List<GeoMessage> geoMessages = geoMessageService.getMessagesAroundLocation(latitude, longitude);
+    ResponseEntity getMessagesAroundLocation(
+            @RequestParam("latitude") double latitude,
+            @RequestParam("longitude") double longitude,
+            @RequestParam("latitudeRadius") double latitudeRadius,
+            @RequestParam("longitudeRadius") double longitudeRadius) {
+        List<GeoMessage> geoMessages = geoMessageService.getMessagesAroundLocation(latitude, longitude, latitudeRadius, longitudeRadius);
         return geoMessages != null ? ResponseEntity.ok(geoMessages) : ResponseEntity.status(400).build();
     }
 

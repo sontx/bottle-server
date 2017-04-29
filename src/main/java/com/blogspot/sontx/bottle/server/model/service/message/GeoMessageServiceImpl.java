@@ -33,11 +33,11 @@ public class GeoMessageServiceImpl implements GeoMessageService {
 
     @Override
     @Transactional
-    public List<GeoMessage> getMessagesAroundLocation(double latitude, double longitude) {
-        double latitudeTop = latitude + defaultRadius;
-        double latitudeBottom = latitude - defaultRadius;
-        double longitudeLeft = longitude - defaultRadius;
-        double longitudeRight = longitude + defaultRadius;
+    public List<GeoMessage> getMessagesAroundLocation(double latitude, double longitude, double latitudeRadius, double longitudeRadius) {
+        double latitudeTop = latitude + latitudeRadius;
+        double latitudeBottom = latitude - latitudeRadius;
+        double longitudeLeft = longitude - longitudeRadius;
+        double longitudeRight = longitude + longitudeRadius;
         List<GeoMessageEntity> allAroundLocation = geoMessageRepository.findAllAroundLocation(latitudeTop, latitudeBottom, longitudeLeft, longitudeRight);
 
         List<GeoMessage> geoMessages = new ArrayList<>(allAroundLocation.size());
