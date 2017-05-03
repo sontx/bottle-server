@@ -44,7 +44,7 @@ public class UserSettingServiceImpl implements UserSettingService {
         userSetting.setCurrentLocation(coordination);
 
         GeoMessageEntity messageEntity = userSettingEntity.getMessageEntity();
-        userSetting.setCurrentRoomId(messageEntity != null ? messageEntity.getId() : -1);
+        userSetting.setMessageId(messageEntity != null ? messageEntity.getId() : -1);
 
         return userSetting;
     }
