@@ -1,5 +1,6 @@
 package com.blogspot.sontx.bottle.server.model.service.usersetting;
 
+import com.blogspot.sontx.bottle.server.model.bean.AuthData;
 import com.blogspot.sontx.bottle.server.model.bean.Coordination;
 import com.blogspot.sontx.bottle.server.model.bean.UserSetting;
 import com.blogspot.sontx.bottle.server.model.entity.GeoMessageEntity;
@@ -21,11 +22,18 @@ public class UserSettingServiceImpl implements UserSettingService {
 
     @Override
     @Transactional
-    public UserSetting getUserSetting(String userId) {
+    public UserSetting getUserSetting(String userId, AuthData authData) {
         if (StringUtils.isEmpty(userId))
             return null;
 
+        if (!userId.equals(authData.getUid()))
+            return null;
+
         UserSettingEntity userSettingEntity = userSettingRepository.findOneByPublicProfileId(userId);
+
+        if (userSettingEntity == null) {
+            return null;
+        }
 
         UserSetting userSetting = new UserSetting();
         userSetting.setCurrentRoomId(userSettingEntity.getCurrentRoomId());
@@ -42,11 +50,16 @@ public class UserSettingServiceImpl implements UserSettingService {
     }
 
     @Override
-    public UserSetting updateUserSetting(String userId, UserSetting userSetting) {
+    public UserSetting updateUserSetting(String userId, UserSetting userSetting, AuthData authData) {
         if (StringUtils.isEmpty(userId))
             return null;
+
+        if (!userId.equals(authData.getUid()))
+            return null;
+
         UserSettingEntity userSettingEntity = userSettingRepository.findOneByPublicProfileId(userId);
         if (userSettingEntity != null) {
+
             userSettingEntity.setCurrentRoomId(userSetting.getCurrentRoomId());
 
             Coordination currentLocation = userSetting.getCurrentLocation();
