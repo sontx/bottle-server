@@ -95,4 +95,33 @@ public class GeoMessageServiceImpl implements GeoMessageService {
         }
         return null;
     }
+
+    @Override
+    @Transactional
+    public GeoMessage editMessage(int messageId, GeoMessage message, AuthData authData) {
+
+        GeoMessageEntity geoMessageEntity = geoMessageRepository.findOne(messageId);
+        if (geoMessageEntity == null)
+            return null;
+
+        if (!geoMessageEntity.getPublicProfile().getId().equalsIgnoreCase(authData.getUid()))
+            return null;
+
+        geoMessageEntity.setAddressName(message.getAddressName());
+        geoMessageEntity.setLatitude(message.getLatitude());
+        geoMessageEntity.setLongitude(message.getLongitude());
+
+        MessageDetailEntity messageDetailEntity = geoMessageEntity.getMessageDetail();
+        messageDetailEntity.setText(message.getText());
+        messageDetailEntity.setType(message.getType());
+        messageDetailEntity.setMediaUrl(message.getMediaUrl());
+
+        geoMessageRepository.saveAndFlush(geoMessageEntity);
+
+        message.setId(geoMessageEntity.getId());
+        message.setTimestamp(messageDetailEntity.getTimestamp().getTime());
+
+        return message;
+
+    }
 }
