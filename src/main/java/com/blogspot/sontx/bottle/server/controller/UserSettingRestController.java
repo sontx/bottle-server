@@ -24,7 +24,7 @@ class UserSettingRestController {
         return userSetting != null ? ResponseEntity.ok(userSetting) : ResponseEntity.status(400).build();
     }
 
-    @PutMapping("{userId")
+    @PutMapping("{userId}")
     ResponseEntity updateUserSetting(@PathVariable String userId, @RequestBody UserSetting userSetting, UsernamePasswordAuthenticationToken authenticationToken) {
         userSetting = userSettingService.updateUserSetting(userId, userSetting, (AuthData) authenticationToken.getPrincipal());
         return userSetting != null ? ResponseEntity.ok(userSetting) : ResponseEntity.status(400).build();
