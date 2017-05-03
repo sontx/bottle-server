@@ -2,10 +2,12 @@ package com.blogspot.sontx.bottle.server.model.service.usersetting;
 
 import com.blogspot.sontx.bottle.server.model.bean.Coordination;
 import com.blogspot.sontx.bottle.server.model.bean.UserSetting;
+import com.blogspot.sontx.bottle.server.model.entity.GeoMessageEntity;
 import com.blogspot.sontx.bottle.server.model.entity.UserSettingEntity;
 import com.blogspot.sontx.bottle.server.model.repository.UserSettingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -18,6 +20,7 @@ public class UserSettingServiceImpl implements UserSettingService {
     }
 
     @Override
+    @Transactional
     public UserSetting getUserSetting(String userId) {
         if (StringUtils.isEmpty(userId))
             return null;
@@ -30,8 +33,10 @@ public class UserSettingServiceImpl implements UserSettingService {
         Coordination coordination = new Coordination();
         coordination.setLatitude(userSettingEntity.getCurrentLatitude());
         coordination.setLongitude(userSettingEntity.getCurrentLongitude());
-
         userSetting.setCurrentLocation(coordination);
+
+        GeoMessageEntity messageEntity = userSettingEntity.getMessageEntity();
+        userSetting.setCurrentRoomId(messageEntity != null ? messageEntity.getId() : -1);
 
         return userSetting;
     }

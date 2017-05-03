@@ -6,8 +6,10 @@ import com.blogspot.sontx.bottle.server.model.bean.PublicProfile;
 import com.blogspot.sontx.bottle.server.model.entity.GeoMessageEntity;
 import com.blogspot.sontx.bottle.server.model.entity.MessageDetailEntity;
 import com.blogspot.sontx.bottle.server.model.entity.PublicProfileEntity;
+import com.blogspot.sontx.bottle.server.model.entity.UserSettingEntity;
 import com.blogspot.sontx.bottle.server.model.repository.GeoMessageRepository;
 import com.blogspot.sontx.bottle.server.model.repository.PublicProfileRepository;
+import com.blogspot.sontx.bottle.server.model.repository.UserSettingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -24,11 +26,13 @@ public class GeoMessageServiceImpl implements GeoMessageService {
     private double defaultRadius;
     private final GeoMessageRepository geoMessageRepository;
     private final PublicProfileRepository publicProfileRepository;
+    private final UserSettingRepository userSettingRepository;
 
     @Autowired
-    public GeoMessageServiceImpl(GeoMessageRepository geoMessageRepository, PublicProfileRepository publicProfileRepository) {
+    public GeoMessageServiceImpl(GeoMessageRepository geoMessageRepository, PublicProfileRepository publicProfileRepository, UserSettingRepository userSettingRepository) {
         this.geoMessageRepository = geoMessageRepository;
         this.publicProfileRepository = publicProfileRepository;
+        this.userSettingRepository = userSettingRepository;
     }
 
     @Override
@@ -91,9 +95,20 @@ public class GeoMessageServiceImpl implements GeoMessageService {
             message.setId(geoMessageEntity.getId());
             message.setTimestamp(messageDetailEntity.getTimestamp().getTime());
 
+            updateUserSettingIfNecessary(publicProfileEntity, geoMessageEntity);
+
             return message;
         }
         return null;
+    }
+
+    @Transactional
+    private void updateUserSettingIfNecessary(PublicProfileEntity currentUser, GeoMessageEntity geoMessageEntity) {
+        UserSettingEntity userSettingEntity = currentUser.getUserSetting();
+        if (userSettingEntity.getMessageEntity() == null) {
+            userSettingEntity.setMessageEntity(geoMessageEntity);
+            userSettingRepository.save(userSettingEntity);
+        }
     }
 
     @Override

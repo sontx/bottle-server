@@ -32,4 +32,8 @@ public class UserSettingEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "id", nullable = false)
     private PublicProfileEntity publicProfile;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "messageId", referencedColumnName = "id", nullable = true)
+    private GeoMessageEntity messageEntity;
 }
