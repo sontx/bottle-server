@@ -9,4 +9,6 @@ public interface RoomMessageService {
     RoomMessage postMessage(int roomId, RoomMessage message, AuthData authData);
 
     List<RoomMessage> getMessages(int roomId, int page, int pageSize);
+
+    RoomMessage updateMessage(int messageId, RoomMessage message, AuthData authData);
 }

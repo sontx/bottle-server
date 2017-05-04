@@ -41,4 +41,10 @@ public class RoomRestController {
         List<RoomMessage> roomMessage = roomMessageService.getMessages(roomId, page, pageSize);
         return roomMessage != null ? ResponseEntity.ok(roomMessage) : ResponseEntity.status(400).build();
     }
+
+    @PutMapping("messages/{messageId}")
+    ResponseEntity updateMessage(@PathVariable int messageId, @RequestBody RoomMessage message, UsernamePasswordAuthenticationToken authenticationToken) {
+        RoomMessage roomMessage = roomMessageService.updateMessage(messageId, message, (AuthData) authenticationToken.getPrincipal());
+        return roomMessage != null ? ResponseEntity.ok(roomMessage) : ResponseEntity.status(400).build();
+    }
 }

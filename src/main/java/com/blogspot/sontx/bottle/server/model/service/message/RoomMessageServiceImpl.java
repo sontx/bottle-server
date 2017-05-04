@@ -19,7 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -82,6 +84,29 @@ public class RoomMessageServiceImpl implements RoomMessageService {
         }
 
         return roomMessages;
+    }
+
+    @Override
+    @Transactional
+    public RoomMessage updateMessage(int messageId, RoomMessage message, AuthData authData) {
+        RoomMessageEntity roomMessageEntity = roomMessageRepository.findOne(messageId);
+
+        if (roomMessageEntity == null)
+            return null;
+
+        if (!roomMessageEntity.getPublicProfile().getId().equals(authData.getUid()))
+            return null;
+
+        MessageDetailEntity messageDetailEntity = roomMessageEntity.getMessageDetail();
+        messageDetailEntity.setText(message.getText());
+        messageDetailEntity.setMediaUrl(message.getMediaUrl());
+        messageDetailEntity.setTimestamp(new Timestamp(new Date().getTime()));
+
+        roomMessageRepository.save(roomMessageEntity);
+
+        message.setTimestamp(messageDetailEntity.getTimestamp().getTime());
+
+        return message;
     }
 
     private RoomMessage createRoomMessageFromEntity(RoomMessageEntity roomMessageEntity) {
