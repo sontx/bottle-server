@@ -105,6 +105,7 @@ public class RoomMessageServiceImpl implements RoomMessageService {
         roomMessageRepository.save(roomMessageEntity);
 
         message.setTimestamp(messageDetailEntity.getTimestamp().getTime());
+        message.setRoomId(roomMessageEntity.getRoom().getId());
 
         return message;
     }

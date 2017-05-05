@@ -13,4 +13,5 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @ComponentScan(basePackageClasses = ApplicationRoot.class)
 public class AppConfig {
+
 }
