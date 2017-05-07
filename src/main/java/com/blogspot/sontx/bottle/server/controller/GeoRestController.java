@@ -28,6 +28,12 @@ public class GeoRestController {
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
+    @GetMapping("messages/{messageId}")
+    ResponseEntity getMessage(@PathVariable int messageId) {
+        GeoMessage geoMessage = geoMessageService.getMessage(messageId);
+        return geoMessage != null ? ResponseEntity.ok(geoMessage) : ResponseEntity.status(400).build();
+    }
+
     @GetMapping("messages")
     ResponseEntity getMessagesAroundLocation(
             @RequestParam("latitude") double latitude,

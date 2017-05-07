@@ -46,28 +46,7 @@ public class GeoMessageServiceImpl implements GeoMessageService {
 
         List<GeoMessage> geoMessages = new ArrayList<>(allAroundLocation.size());
         for (GeoMessageEntity geoMessageEntity : allAroundLocation) {
-            MessageDetailEntity messageDetail = geoMessageEntity.getMessageDetail();
-            GeoMessage geoMessage = new GeoMessage();
-
-            geoMessage.setId(geoMessageEntity.getId());
-
-            geoMessage.setText(messageDetail.getText());
-            geoMessage.setMediaUrl(messageDetail.getMediaUrl());
-            geoMessage.setType(messageDetail.getType());
-            geoMessage.setTimestamp(messageDetail.getTimestamp().getTime());
-
-            geoMessage.setAddressName(geoMessageEntity.getAddressName());
-            geoMessage.setLatitude(geoMessageEntity.getLatitude());
-            geoMessage.setLongitude(geoMessageEntity.getLongitude());
-
-            PublicProfileEntity publicProfileEntity = geoMessageEntity.getPublicProfile();
-            PublicProfile publicProfile = new PublicProfile();
-            publicProfile.setId(publicProfileEntity.getId());
-            publicProfile.setDisplayName(publicProfileEntity.getDisplayName());
-            publicProfile.setAvatarUrl(publicProfileEntity.getAvatarUrl());
-
-            geoMessage.setOwner(publicProfile);
-
+            GeoMessage geoMessage = getGeoMessage(geoMessageEntity);
             geoMessages.add(geoMessage);
         }
 
@@ -138,5 +117,37 @@ public class GeoMessageServiceImpl implements GeoMessageService {
 
         return message;
 
+    }
+
+    @Override
+    @Transactional
+    public GeoMessage getMessage(int messageId) {
+        GeoMessageEntity messageEntity = geoMessageRepository.findOne(messageId);
+        return messageEntity != null ? getGeoMessage(messageEntity) : null;
+    }
+
+    private GeoMessage getGeoMessage(GeoMessageEntity geoMessageEntity) {
+        MessageDetailEntity messageDetail = geoMessageEntity.getMessageDetail();
+        GeoMessage geoMessage = new GeoMessage();
+
+        geoMessage.setId(geoMessageEntity.getId());
+
+        geoMessage.setText(messageDetail.getText());
+        geoMessage.setMediaUrl(messageDetail.getMediaUrl());
+        geoMessage.setType(messageDetail.getType());
+        geoMessage.setTimestamp(messageDetail.getTimestamp().getTime());
+
+        geoMessage.setAddressName(geoMessageEntity.getAddressName());
+        geoMessage.setLatitude(geoMessageEntity.getLatitude());
+        geoMessage.setLongitude(geoMessageEntity.getLongitude());
+
+        PublicProfileEntity publicProfileEntity = geoMessageEntity.getPublicProfile();
+        PublicProfile publicProfile = new PublicProfile();
+        publicProfile.setId(publicProfileEntity.getId());
+        publicProfile.setDisplayName(publicProfileEntity.getDisplayName());
+        publicProfile.setAvatarUrl(publicProfileEntity.getAvatarUrl());
+
+        geoMessage.setOwner(publicProfile);
+        return geoMessage;
     }
 }
