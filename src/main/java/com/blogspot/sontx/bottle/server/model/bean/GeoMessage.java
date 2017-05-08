@@ -9,4 +9,5 @@ public class GeoMessage extends Message {
     private double longitude;
     private double latitude;
     private String addressName;
+    private int emotion;
 }

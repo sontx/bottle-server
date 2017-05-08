@@ -63,6 +63,7 @@ public class GeoMessageServiceImpl implements GeoMessageService {
             messageDetailEntity.setMediaUrl(message.getMediaUrl());
 
             GeoMessageEntity geoMessageEntity = new GeoMessageEntity();
+            geoMessageEntity.setEmotion(message.getEmotion());
             geoMessageEntity.setAddressName(message.getAddressName());
             geoMessageEntity.setLatitude(message.getLatitude());
             geoMessageEntity.setLongitude(message.getLongitude());
@@ -101,6 +102,7 @@ public class GeoMessageServiceImpl implements GeoMessageService {
         if (!geoMessageEntity.getPublicProfile().getId().equalsIgnoreCase(authData.getUid()))
             return null;
 
+        geoMessageEntity.setEmotion(message.getEmotion());
         geoMessageEntity.setAddressName(message.getAddressName());
         geoMessageEntity.setLatitude(message.getLatitude());
         geoMessageEntity.setLongitude(message.getLongitude());
@@ -137,6 +139,7 @@ public class GeoMessageServiceImpl implements GeoMessageService {
         geoMessage.setType(messageDetail.getType());
         geoMessage.setTimestamp(messageDetail.getTimestamp().getTime());
 
+        geoMessage.setEmotion(geoMessageEntity.getEmotion());
         geoMessage.setAddressName(geoMessageEntity.getAddressName());
         geoMessage.setLatitude(geoMessageEntity.getLatitude());
         geoMessage.setLongitude(geoMessageEntity.getLongitude());

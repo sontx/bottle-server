@@ -29,6 +29,10 @@ public class GeoMessageEntity {
     @Column(name = "addressName", nullable = true, length = 100)
     private String addressName;
 
+    @Basic
+    @Column(name = "emotion", nullable = false)
+    private int emotion;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "detailId", referencedColumnName = "id", nullable = false)
     private MessageDetailEntity messageDetail;
