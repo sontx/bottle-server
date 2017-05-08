@@ -9,4 +9,6 @@ import java.util.List;
 public interface GeoMessageRepository extends JpaRepository<GeoMessageEntity, Integer> {
     @Query("select geo from GeoMessageEntity geo where (geo.latitude < ?1 and geo.latitude > ?2) and (geo.longitude > ?3 and geo.longitude < ?4)")
     List<GeoMessageEntity> findAllAroundLocation(double latitudeTop, double latitudeBottom, double longitudeLeft, double longitudeRight);
+
+    void removeOneByIdEquals(int messageId);
 }

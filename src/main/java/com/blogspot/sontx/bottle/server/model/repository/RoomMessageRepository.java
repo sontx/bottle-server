@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface RoomMessageRepository extends JpaRepository<RoomMessageEntity, Integer> {
 
     Page<RoomMessageEntity> findAllByRoomIdOrderByMessageDetail_TimestampDesc(int roomId, Pageable pageable);
+
+    void removeOneByIdEquals(int messageId);
 }

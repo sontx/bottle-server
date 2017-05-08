@@ -13,4 +13,6 @@ public interface GeoMessageService {
     GeoMessage editMessage(int messageId, GeoMessage message, AuthData authData);
 
     GeoMessage getMessage(int messageId);
+
+    GeoMessage deleteMessage(int messageId, AuthData authData);
 }

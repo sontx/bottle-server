@@ -77,4 +77,19 @@ public class RoomRestController {
 
         return roomMessage != null ? ResponseEntity.ok(roomMessage) : ResponseEntity.status(400).build();
     }
+
+    @DeleteMapping("messages/{messageId}")
+    ResponseEntity deleteMessage(@PathVariable int messageId, UsernamePasswordAuthenticationToken authenticationToken) {
+        RoomMessage roomMessage = roomMessageService.deleteMessage(messageId, (AuthData) authenticationToken.getPrincipal());
+
+        if (roomMessage != null) {
+            String broadcast = WEBSOCKET_TOPIC + roomMessage.getRoomId();
+            RoomMessageChanged roomMessageChanged = new RoomMessageChanged();
+            roomMessageChanged.setId(roomMessage.getId());
+            roomMessageChanged.setState("delete");
+            simpMessagingTemplate.convertAndSend(broadcast, roomMessageChanged);
+        }
+
+        return roomMessage != null ? ResponseEntity.ok(roomMessage) : ResponseEntity.status(400).build();
+    }
 }

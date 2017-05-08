@@ -82,15 +82,6 @@ public class GeoMessageServiceImpl implements GeoMessageService {
         return null;
     }
 
-    @Transactional
-    private void updateUserSettingIfNecessary(PublicProfileEntity currentUser, GeoMessageEntity geoMessageEntity) {
-        UserSettingEntity userSettingEntity = currentUser.getUserSetting();
-        if (userSettingEntity.getMessageEntity() == null) {
-            userSettingEntity.setMessageEntity(geoMessageEntity);
-            userSettingRepository.save(userSettingEntity);
-        }
-    }
-
     @Override
     @Transactional
     public GeoMessage editMessage(int messageId, GeoMessage message, AuthData authData) {
@@ -126,6 +117,30 @@ public class GeoMessageServiceImpl implements GeoMessageService {
     public GeoMessage getMessage(int messageId) {
         GeoMessageEntity messageEntity = geoMessageRepository.findOne(messageId);
         return messageEntity != null ? getGeoMessage(messageEntity) : null;
+    }
+
+    @Transactional
+    private void updateUserSettingIfNecessary(PublicProfileEntity currentUser, GeoMessageEntity geoMessageEntity) {
+        UserSettingEntity userSettingEntity = currentUser.getUserSetting();
+        if (userSettingEntity.getMessageEntity() == null) {
+            userSettingEntity.setMessageEntity(geoMessageEntity);
+            userSettingRepository.save(userSettingEntity);
+        }
+    }
+
+    @Override
+    @Transactional
+    public GeoMessage deleteMessage(int messageId, AuthData authData) {
+        GeoMessageEntity messageEntity = geoMessageRepository.findOne(messageId);
+        if (messageEntity != null) {
+            PublicProfileEntity publicProfileEntity = messageEntity.getPublicProfile();
+            if (publicProfileEntity.getId().equals(authData.getUid())) {
+                GeoMessage geoMessage = getGeoMessage(messageEntity);
+                geoMessageRepository.removeOneByIdEquals(messageId);
+                return geoMessage;
+            }
+        }
+        return null;
     }
 
     private GeoMessage getGeoMessage(GeoMessageEntity geoMessageEntity) {

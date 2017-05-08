@@ -13,4 +13,6 @@ public interface RoomMessageService {
     RoomMessage updateMessage(int messageId, RoomMessage message, AuthData authData);
 
     RoomMessage getMessage(int messageId);
+
+    RoomMessage deleteMessage(int messageId, AuthData authData);
 }

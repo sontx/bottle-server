@@ -119,6 +119,19 @@ public class RoomMessageServiceImpl implements RoomMessageService {
         return createRoomMessageFromEntity(roomMessageEntity);
     }
 
+    @Override
+    @Transactional
+    public RoomMessage deleteMessage(int messageId, AuthData authData) {
+        RoomMessageEntity roomMessageEntity = roomMessageRepository.findOne(messageId);
+        if (roomMessageEntity == null)
+            return null;
+        if (!roomMessageEntity.getPublicProfile().getId().equals(authData.getUid()))
+            return null;
+        RoomMessage roomMessage = createRoomMessageFromEntity(roomMessageEntity);
+        roomMessageRepository.removeOneByIdEquals(messageId);
+        return roomMessage;
+    }
+
     private RoomMessage createRoomMessageFromEntity(RoomMessageEntity roomMessageEntity) {
         RoomMessage roomMessage = new RoomMessage();
 

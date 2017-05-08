@@ -77,4 +77,21 @@ public class GeoRestController {
 
         return geoMessage != null ? ResponseEntity.ok(geoMessage) : ResponseEntity.status(400).build();
     }
+
+    @DeleteMapping("messages/{messageId}")
+    ResponseEntity deleteMessage(@PathVariable int messageId, UsernamePasswordAuthenticationToken authenticationToken) {
+        log.info("deleting " + messageId);
+        GeoMessage geoMessage = geoMessageService.deleteMessage(messageId, (AuthData) authenticationToken.getPrincipal());
+
+        if (geoMessage != null) {
+            GeoMessageChanged geoMessageChanged = new GeoMessageChanged();
+            geoMessageChanged.setId(geoMessage.getId());
+            geoMessageChanged.setLatitude(geoMessage.getLatitude());
+            geoMessageChanged.setLongitude(geoMessage.getLongitude());
+            geoMessageChanged.setState("delete");
+            simpMessagingTemplate.convertAndSend(WEBSOCKET_TOPIC, geoMessageChanged);
+        }
+
+        return geoMessage != null ? ResponseEntity.ok(geoMessage) : ResponseEntity.status(400).build();
+    }
 }
