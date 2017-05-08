@@ -110,6 +110,15 @@ public class RoomMessageServiceImpl implements RoomMessageService {
         return message;
     }
 
+    @Override
+    @Transactional
+    public RoomMessage getMessage(int messageId) {
+        RoomMessageEntity roomMessageEntity = roomMessageRepository.findOne(messageId);
+        if (roomMessageEntity == null)
+            return null;
+        return createRoomMessageFromEntity(roomMessageEntity);
+    }
+
     private RoomMessage createRoomMessageFromEntity(RoomMessageEntity roomMessageEntity) {
         RoomMessage roomMessage = new RoomMessage();
 

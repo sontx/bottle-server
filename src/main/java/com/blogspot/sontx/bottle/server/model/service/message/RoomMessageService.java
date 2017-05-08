@@ -11,4 +11,6 @@ public interface RoomMessageService {
     List<RoomMessage> getMessages(int roomId, int page, int pageSize);
 
     RoomMessage updateMessage(int messageId, RoomMessage message, AuthData authData);
+
+    RoomMessage getMessage(int messageId);
 }
