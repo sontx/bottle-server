@@ -3,6 +3,7 @@ package com.blogspot.sontx.bottle.server.config;
 import com.blogspot.sontx.bottle.server.ApplicationRoot;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  */
 @Configuration
 @EnableWebMvc
+@EnableScheduling
 @ComponentScan(basePackageClasses = ApplicationRoot.class)
 public class AppConfig {
 

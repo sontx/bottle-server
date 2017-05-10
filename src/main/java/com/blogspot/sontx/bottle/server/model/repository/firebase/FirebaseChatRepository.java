@@ -3,8 +3,7 @@ package com.blogspot.sontx.bottle.server.model.repository.firebase;
 import com.blogspot.sontx.bottle.server.model.bean.chat.*;
 import com.blogspot.sontx.bottle.server.model.repository.ChatRepository;
 import com.blogspot.sontx.bottle.server.utils.BeanUtils;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.*;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -36,6 +35,42 @@ public class FirebaseChatRepository implements ChatRepository {
         CreateChannelResult createChannelResult = new CreateChannelResult();
         createChannelResult.setId(channelId);
         return createChannelResult;
+    }
+
+    @Override
+    public void deleteExpiredChannels(long beforeMillis) {
+        DatabaseReference channelDetailsRef = firebaseManager.getReference("channel_details");
+        channelDetailsRef.orderByChild("timestamp").endAt(beforeMillis).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String channelId = snapshot.getKey();
+
+                    firebaseManager.getReference("channel_members").child(channelId).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                                firebaseManager.getReference("user_channels").child(dataSnapshot1.getKey()).child(channelId).removeValue();
+                            }
+                            dataSnapshot.getRef().removeValue();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
+                    firebaseManager.getReference("messages").child(channelId).removeValue();
+                    snapshot.getRef().removeValue();// channel_details
+
+                    log.debug("Removed channel: " + channelId);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private String createChannelMembers(String userId1, String userId2) {
