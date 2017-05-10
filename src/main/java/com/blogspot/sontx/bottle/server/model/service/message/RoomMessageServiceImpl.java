@@ -132,6 +132,13 @@ public class RoomMessageServiceImpl implements RoomMessageService {
         return roomMessage;
     }
 
+    @Override
+    @Transactional
+    public void deleteExpiredMessages(long beforeMillis) {
+        Timestamp timestamp = new Timestamp(beforeMillis);
+        roomMessageRepository.removeAllByMessageDetail_TimestampBefore(timestamp);
+    }
+
     private RoomMessage createRoomMessageFromEntity(RoomMessageEntity roomMessageEntity) {
         RoomMessage roomMessage = new RoomMessage();
 

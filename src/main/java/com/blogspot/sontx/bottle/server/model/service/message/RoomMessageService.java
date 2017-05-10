@@ -15,4 +15,6 @@ public interface RoomMessageService {
     RoomMessage getMessage(int messageId);
 
     RoomMessage deleteMessage(int messageId, AuthData authData);
+
+    void deleteExpiredMessages(long beforeMillis);
 }
