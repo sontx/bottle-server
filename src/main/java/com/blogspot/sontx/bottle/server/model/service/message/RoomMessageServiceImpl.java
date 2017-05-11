@@ -10,6 +10,7 @@ import com.blogspot.sontx.bottle.server.model.entity.RoomMessageEntity;
 import com.blogspot.sontx.bottle.server.model.repository.PublicProfileRepository;
 import com.blogspot.sontx.bottle.server.model.repository.RoomMessageRepository;
 import com.blogspot.sontx.bottle.server.model.repository.RoomRepository;
+import com.blogspot.sontx.bottle.server.model.service.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -26,7 +27,7 @@ import java.util.List;
 
 @Service
 @PropertySource("classpath:bottle-config.properties")
-public class RoomMessageServiceImpl implements RoomMessageService {
+public class RoomMessageServiceImpl extends MessageServiceBase implements RoomMessageService {
     @Value("${default.page.size}")
     private int defaultPageSize;
     private final RoomRepository roomRepository;
@@ -34,7 +35,11 @@ public class RoomMessageServiceImpl implements RoomMessageService {
     private final PublicProfileRepository publicProfileRepository;
 
     @Autowired
-    public RoomMessageServiceImpl(RoomRepository roomRepository, RoomMessageRepository roomMessageRepository, PublicProfileRepository publicProfileRepository) {
+    public RoomMessageServiceImpl(RoomRepository roomRepository,
+                                  RoomMessageRepository roomMessageRepository,
+                                  PublicProfileRepository publicProfileRepository,
+                                  AuthService authService) {
+        super(authService);
         this.roomRepository = roomRepository;
         this.roomMessageRepository = roomMessageRepository;
         this.publicProfileRepository = publicProfileRepository;
@@ -129,6 +134,8 @@ public class RoomMessageServiceImpl implements RoomMessageService {
             return null;
         RoomMessage roomMessage = createRoomMessageFromEntity(roomMessageEntity);
         roomMessageRepository.removeOneByIdEquals(messageId);
+        if (!roomMessage.getType().equals("text") && roomMessage.getMediaUrl() != null)
+            deleteMedia(roomMessage.getMediaUrl());
         return roomMessage;
     }
 

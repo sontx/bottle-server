@@ -12,14 +12,15 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 @PropertySource("classpath:bottle-config.properties")
 public class FakeAuthService implements AuthService {
 
     @Value("${jwt.secret}")
     private String secret;
+    @Value("${bottlefs.admin.id}")
+    private String bottlefsAdminId;
     @Value("${default.room.id}")
     private int defaultRoomId;
 
@@ -59,6 +60,11 @@ public class FakeAuthService implements AuthService {
         VerifyResult verifyResult = new VerifyResult();
         verifyResult.setUserId(authData.getUid());
         return verifyResult;
+    }
+
+    @Override
+    public String getBottlefsAuthToken() {
+        return createJwtToken(bottlefsAdminId);
     }
 
     private void updatePublicProfileIfNecessary(String uid) {

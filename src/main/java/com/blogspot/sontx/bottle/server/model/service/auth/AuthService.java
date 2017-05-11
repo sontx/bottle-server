@@ -11,4 +11,6 @@ public interface AuthService {
     AuthData authenticateWithToken(String token);
 
     VerifyResult verify(AuthData authData);
+
+    String getBottlefsAuthToken();
 }

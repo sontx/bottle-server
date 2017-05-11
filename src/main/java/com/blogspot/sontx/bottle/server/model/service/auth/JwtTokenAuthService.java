@@ -13,15 +13,18 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Log4j
-//@Service
+@Service
 @PropertySource("classpath:bottle-config.properties")
 public class JwtTokenAuthService implements AuthService {
 
     @Value("${jwt.secret}")
     private String secret;
+    @Value("${bottlefs.admin.id}")
+    private String bottlefsAdminId;
     @Value("${default.room.id}")
     private int defaultRoomId;
 
@@ -79,8 +82,18 @@ public class JwtTokenAuthService implements AuthService {
         if (authData == null)
             return null;
         VerifyResult verifyResult = new VerifyResult();
-        verifyResult.setUserId(authData.getUid());
+        String uid = authData.getUid();
+        verifyResult.setUserId(uid);
+        if (uid.equals(bottlefsAdminId))
+            verifyResult.setRole(VerifyResult.ROLE_ADMIN);
+        else
+            verifyResult.setRole(VerifyResult.ROLE_USER);
         return verifyResult;
+    }
+
+    @Override
+    public String getBottlefsAuthToken() {
+        return createJwtToken(bottlefsAdminId);
     }
 
     private void updatePublicProfileIfNecessary(String uid) {

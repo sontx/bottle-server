@@ -10,6 +10,7 @@ import com.blogspot.sontx.bottle.server.model.entity.UserSettingEntity;
 import com.blogspot.sontx.bottle.server.model.repository.GeoMessageRepository;
 import com.blogspot.sontx.bottle.server.model.repository.PublicProfileRepository;
 import com.blogspot.sontx.bottle.server.model.repository.UserSettingRepository;
+import com.blogspot.sontx.bottle.server.model.service.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -21,7 +22,7 @@ import java.util.List;
 
 @Service
 @PropertySource("classpath:bottle-config.properties")
-public class GeoMessageServiceImpl implements GeoMessageService {
+public class GeoMessageServiceImpl extends MessageServiceBase implements GeoMessageService {
     @Value("${default.geo.radius}")
     private double defaultRadius;
     private final GeoMessageRepository geoMessageRepository;
@@ -29,7 +30,11 @@ public class GeoMessageServiceImpl implements GeoMessageService {
     private final UserSettingRepository userSettingRepository;
 
     @Autowired
-    public GeoMessageServiceImpl(GeoMessageRepository geoMessageRepository, PublicProfileRepository publicProfileRepository, UserSettingRepository userSettingRepository) {
+    public GeoMessageServiceImpl(GeoMessageRepository geoMessageRepository,
+                                 PublicProfileRepository publicProfileRepository,
+                                 UserSettingRepository userSettingRepository,
+                                 AuthService authService) {
+        super(authService);
         this.geoMessageRepository = geoMessageRepository;
         this.publicProfileRepository = publicProfileRepository;
         this.userSettingRepository = userSettingRepository;
@@ -137,6 +142,10 @@ public class GeoMessageServiceImpl implements GeoMessageService {
             if (publicProfileEntity.getId().equals(authData.getUid())) {
                 GeoMessage geoMessage = getGeoMessage(messageEntity);
                 geoMessageRepository.removeOneByIdEquals(messageId);
+
+                if (!geoMessage.getType().equals("text") && geoMessage.getMediaUrl() != null)
+                    deleteMedia(geoMessage.getMediaUrl());
+
                 return geoMessage;
             }
         }

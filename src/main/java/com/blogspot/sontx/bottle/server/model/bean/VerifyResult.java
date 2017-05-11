@@ -1,8 +1,16 @@
 package com.blogspot.sontx.bottle.server.model.bean;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 public class VerifyResult {
+    public static final int ROLE_USER = 0;
+    public static final int ROLE_ADMIN = 1;
+
+    @Getter
+    @Setter
     private String userId;
+    @Getter
+    @Setter
+    private int role;
 }
