@@ -2,6 +2,7 @@ package com.blogspot.sontx.bottle.server.model.service.usersetting;
 
 import com.blogspot.sontx.bottle.server.model.bean.AuthData;
 import com.blogspot.sontx.bottle.server.model.bean.Coordination;
+import com.blogspot.sontx.bottle.server.model.bean.Task;
 import com.blogspot.sontx.bottle.server.model.bean.UserSetting;
 import com.blogspot.sontx.bottle.server.model.entity.GeoMessageEntity;
 import com.blogspot.sontx.bottle.server.model.entity.UserSettingEntity;
@@ -22,17 +23,24 @@ public class UserSettingServiceImpl implements UserSettingService {
 
     @Override
     @Transactional
-    public UserSetting getUserSetting(String userId, AuthData authData) {
-        if (StringUtils.isEmpty(userId))
-            return null;
+    public Task<UserSetting> getUserSetting(String userId, AuthData authData) {
+        Task<UserSetting> settingTask = new Task<>();
 
-        if (!userId.equals(authData.getUid()))
-            return null;
+        if (StringUtils.isEmpty(userId)) {
+            settingTask.setMessage("User id is empty");
+            return settingTask;
+        }
+
+        if (!userId.equals(authData.getUid())) {
+            settingTask.setMessage("Can not access to other setting");
+            return settingTask;
+        }
 
         UserSettingEntity userSettingEntity = userSettingRepository.findOneByPublicProfileId(userId);
 
         if (userSettingEntity == null) {
-            return null;
+            settingTask.setMessage("User setting not found");
+            return settingTask;
         }
 
         UserSetting userSetting = new UserSetting();
@@ -46,16 +54,24 @@ public class UserSettingServiceImpl implements UserSettingService {
         GeoMessageEntity messageEntity = userSettingEntity.getMessageEntity();
         userSetting.setMessageId(messageEntity != null ? messageEntity.getId() : -1);
 
-        return userSetting;
+        settingTask.setData(userSetting);
+
+        return settingTask;
     }
 
     @Override
-    public UserSetting updateUserSetting(String userId, UserSetting userSetting, AuthData authData) {
-        if (StringUtils.isEmpty(userId))
-            return null;
+    public Task<UserSetting> updateUserSetting(String userId, UserSetting userSetting, AuthData authData) {
+        Task<UserSetting> settingTask = new Task<>();
 
-        if (!userId.equals(authData.getUid()))
-            return null;
+        if (StringUtils.isEmpty(userId)) {
+            settingTask.setMessage("User id is empty");
+            return settingTask;
+        }
+
+        if (!userId.equals(authData.getUid())) {
+            settingTask.setMessage("Can not access to other setting");
+            return settingTask;
+        }
 
         UserSettingEntity userSettingEntity = userSettingRepository.findOneByPublicProfileId(userId);
         if (userSettingEntity != null) {
@@ -70,9 +86,12 @@ public class UserSettingServiceImpl implements UserSettingService {
 
             userSettingRepository.save(userSettingEntity);
 
-            return userSetting;
+            settingTask.setData(userSetting);
+
+            return settingTask;
         }
 
-        return null;
+        settingTask.setMessage("User setting not found");
+        return settingTask;
     }
 }
