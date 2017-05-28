@@ -1,8 +1,9 @@
 package com.blogspot.sontx.bottle.server.model.bean;
 
-/**
- * Created by sontx on 5/28/2017.
- * Contact www.sontx.in
- */
+import lombok.Data;
+
+@Data
 public class DeleteResult {
+    private String channelId;
+    private boolean deleted;
 }

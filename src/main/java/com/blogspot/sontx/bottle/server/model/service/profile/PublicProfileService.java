@@ -1,8 +1,8 @@
 package com.blogspot.sontx.bottle.server.model.service.profile;
 
-/**
- * Created by sontx on 5/16/2017.
- * Contact www.sontx.in
- */
+import com.blogspot.sontx.bottle.server.model.bean.AuthData;
+import com.blogspot.sontx.bottle.server.model.bean.PublicProfile;
+
 public interface PublicProfileService {
+    PublicProfile updateProfile(String userId, PublicProfile profile, AuthData authData);
 }

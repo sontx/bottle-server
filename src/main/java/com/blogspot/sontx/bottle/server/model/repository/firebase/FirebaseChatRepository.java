@@ -1,5 +1,6 @@
 package com.blogspot.sontx.bottle.server.model.repository.firebase;
 
+import com.blogspot.sontx.bottle.server.model.bean.DeleteResult;
 import com.blogspot.sontx.bottle.server.model.bean.chat.*;
 import com.blogspot.sontx.bottle.server.model.repository.ChatRepository;
 import com.blogspot.sontx.bottle.server.utils.BeanUtils;
@@ -71,6 +72,29 @@ public class FirebaseChatRepository implements ChatRepository {
 
             }
         });
+    }
+
+    @Override
+    public DeleteResult deleteChannel(String channelId) {
+        firebaseManager.getReference("channel_details").child(channelId).removeValue();
+        firebaseManager.getReference("messages").child(channelId).removeValue();
+        firebaseManager.getReference("channel_members").child(channelId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    firebaseManager.getReference("user_channels").child(dataSnapshot1.getKey()).child(channelId).removeValue();
+                }
+                dataSnapshot.getRef().removeValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+        DeleteResult deleteResult = new DeleteResult();
+        deleteResult.setChannelId(channelId);
+        deleteResult.setDeleted(true);
+        return deleteResult;
     }
 
     private String createChannelMembers(String userId1, String userId2) {

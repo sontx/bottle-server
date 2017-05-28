@@ -31,10 +31,10 @@ public class UserSettingServiceImpl implements UserSettingService {
             return settingTask;
         }
 
-        if (!userId.equals(authData.getUid())) {
-            settingTask.setMessage("Can not access to other setting");
-            return settingTask;
-        }
+//        if (!userId.equals(authData.getUid())) {
+//            settingTask.setMessage("Can not access to other setting");
+//            return settingTask;
+//        }
 
         UserSettingEntity userSettingEntity = userSettingRepository.findOneByPublicProfileId(userId);
 

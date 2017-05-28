@@ -1,6 +1,7 @@
 package com.blogspot.sontx.bottle.server.model.service.chat;
 
 import com.blogspot.sontx.bottle.server.model.bean.AuthData;
+import com.blogspot.sontx.bottle.server.model.bean.DeleteResult;
 import com.blogspot.sontx.bottle.server.model.bean.chat.CreateChannelResult;
 import com.blogspot.sontx.bottle.server.model.repository.ChatRepository;
 import lombok.extern.log4j.Log4j;
@@ -25,5 +26,10 @@ public class ChatServiceImpl implements ChatService {
         if (currentUserId.equalsIgnoreCase(buddyId))
             return null;
         return chatRepository.createChannel(currentUserId, buddyId);
+    }
+
+    @Override
+    public DeleteResult deleteChannel(String channelId, AuthData authData) {
+        return chatRepository.deleteChannel(channelId);
     }
 }
